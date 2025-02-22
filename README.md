@@ -38,3 +38,24 @@ int main()
 ```
 
 And fun fact is that when you define a lambda function, compiler will actually make a function object for you, like the one above.
+
+**Regular expression (from day 13)**
+
+A regular expression (shortened *regex*) is a sequence of characters that defines a search pattern. It’s used for pattern matching in strings, for searching, extracting, or replacing text.
+
+Regex is super powerful. Normally, for finding a substring in a big string, you would use something simple like `strstr` (haystack and needle), but this is only good for a very specific case: all characters of the substring have to be present and have to be in the specified order. You can find `hehe@company.com`, but you cannot use it to find `<anything>@<anything>.com`. With regex syntax, you can create more complex patterns like `<one or more letters>@<one or more letters>.com`.
+
+From C++11, you can utilize regex syntax in C++ to help you with parsing. First you need an `std::regex` object and feed it with the pattern string through the constructor. Then you can use the function `std::regex_search` that takes three arguments: the first argument is the haystack (the text you perform the search on), the last argument is the needle (your `std::regex` pattern), and the middle argument is an object that will be able to store your results. If you want your results to be stored in std::strings, you can use `std::smatch` for this purpose.
+
+`smatch` will store the entire matched substring as its 0th element, and each capture group (marked with `()` in the expression) as a separate element following that.
+
+Running the following code on a text saying "Coordinates: X 45 Y 13." will print `13`.
+
+```
+std::regex expr(R"(Coordinates: X\s(\d+) Y\s(\d+).)");
+std::smatch matches;
+if (std::regex_search(haystack, matches, expr))
+{
+    std::cout << matches[2] << std::endl;
+}
+```
